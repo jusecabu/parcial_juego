@@ -149,6 +149,81 @@ Asociar partículas a grupos de sprites (groups) para su integración en el sist
 Modularidad:
 Manejar animaciones específicas (create_grass_particles y create_particles) separadamente para diferentes contextos del juego.
 
+## Tile
+
+Creación de Tiles:
+- Instanciar un objeto Tile con los siguientes atributos:
+    - pos: posición en coordenadas (x, y).
+    - groups: grupos de sprites a los que pertenece el tile.
+    - sprite_type: define el tipo de tile (object, grass, etc.).
+    - surface: superficie gráfica del tile (imagen o color plano predeterminado).
+
+Gestión de la Colisión:
+Generar un rectángulo (hitbox) ajustado según el tipo de tile usando un desplazamiento definido por HITBOX_OFFSET.
+
+Integración con Pygame:
+Vincular el objeto Tile con los grupos de sprites proporcionados, permitiendo su renderizado y actualización en el juego.
+
+Soporte para Diferentes Tipos de Tiles:
+- Ajustar la posición del rectángulo dependiendo del tipo de tile:
+    - Objetos (object) se renderizan con un desplazamiento vertical adicional.
+    - Otros tipos de tiles (grass, boundary, etc.) se renderizan directamente en la posición proporcionada.
+
+## UI
+
+Visualización de Barras de Salud y Energía:
+- Mostrar barras dinámicas que representan la salud y energía del jugador.
+- Ajustar el ancho de las barras proporcionalmente al valor actual (current) y al máximo (max_amount).
+
+Indicador de Experiencia:
+Mostrar la cantidad de experiencia (exp) acumulada en la esquina inferior derecha de la pantalla.
+
+Cuadros de Selección de Ítems:
+- Dibujar cuadros para representar la selección de armas y magias.
+- Cambiar el color del borde si el jugador cambia de ítem.
+
+Superposiciones Gráficas:
+Mostrar gráficos de armas y magias seleccionadas en los cuadros de selección.
+
+Integración con el Jugador:
+Utilizar datos del jugador como salud, energía, experiencia, arma actual, y magia seleccionada para renderizar elementos dinámicos.
+
+Pantalla Principal:
+Representar todos los elementos del sistema de interfaz gráfica al ser invocado el método display(player).
+
+## Upgrade y Item
+
+Sistema de Mejora de Atributos:
+- Mostrar una lista de atributos del jugador que pueden ser mejorados.
+- Permitir la selección de un atributo utilizando teclas (izquierda, derecha).
+- Mejorar atributos seleccionados al presionar la barra espaciadora si se cumplen los requisitos de experiencia.
+
+Visualización Dinámica:
+- Mostrar los nombres, valores actuales, valores máximos y costos de mejora para cada atributo.
+- Visualizar barras que representen gráficamente el progreso de los atributos.
+
+Interacción del Jugador:
+- Detectar entradas del jugador para cambiar de selección o activar mejoras.
+- Bloquear la interacción por un período de enfriamiento después de realizar una acción.
+
+Actualización de Elementos:
+Ajustar los costos y valores de los atributos dinámicamente tras realizar una mejora.
+
+Renderizado de la Interfaz:
+Dibujar los cuadros de atributos seleccionados con un diseño destacado en comparación con los no seleccionados.
+
+## Weapon
+
+Generación de Armas:
+- Crear una instancia de arma basada en el estado del jugador (posición y dirección).
+- Cargar la imagen adecuada para el arma desde el sistema de archivos según el tipo de arma equipada y la dirección del jugador.
+
+Posicionamiento Dinámico:
+Determinar y ajustar dinámicamente la posición del arma en relación con el rectángulo (rect) del jugador y su dirección (arriba, abajo, izquierda o derecha).
+
+Integración con el Sistema de Sprites:
+Permitir que las armas se integren con otros sprites del juego mediante la pertenencia a grupos de sprites (groups).
+
 # Requisitos no funcionales
 
 ## Entity
@@ -295,3 +370,77 @@ Integración con el sistema de grupos de Pygame para permitir una fácil actuali
 
 Experiencia de Usuario:
 Proveer efectos visuales coherentes y atractivos que realcen la experiencia de juego.
+
+## Tile
+
+Flexibilidad:
+Permitir una fácil adición de nuevos tipos de tiles con ajustes específicos en el futuro.
+
+Rendimiento:
+Usar rectángulos inflados (hitbox) para cálculos rápidos de colisión sin comprometer la precisión.
+
+Compatibilidad:
+Asegurar que los tiles sean compatibles con el motor de renderizado y colisión de Pygame.
+
+Reutilización:
+Modularidad suficiente para reutilizar la clase Tile en diferentes niveles o mapas.
+
+Simplicidad:
+Implementación mínima y clara para gestionar elementos estáticos del mapa con alta eficiencia.
+
+## UI
+
+Rendimiento:
+Optimizar el uso de gráficos pre-cargados (weapon_graphics y magic_graphics) para evitar sobrecarga de recursos.
+
+Flexibilidad:
+Soportar futuras expansiones, como añadir más gráficos de armas o magias sin modificar métodos principales.
+
+Compatibilidad:
+Integrarse completamente con Pygame para la renderización y cálculo de posiciones.
+
+Claridad Visual:
+Garantizar que todos los elementos de la interfaz sean legibles y estén claramente visibles en diferentes tamaños de pantalla.
+
+Modularidad:
+Facilitar el mantenimiento al organizar los métodos por funcionalidad específica (barras, experiencia, cuadros, superposiciones).
+
+Estilo Consistente:
+Usar colores, fuentes y tamaños definidos en settings.py para mantener coherencia visual con otros elementos del juego.
+
+## Upgrade y Item
+
+Eficiencia:
+Optimizar la detección de entrada y renderizado para mantener un rendimiento fluido en pantalla.
+
+Extensibilidad:
+Facilitar la adición de nuevos atributos o modificaciones al sistema de mejoras sin alterar significativamente el código.
+
+Claridad Visual:
+Diseñar la interfaz de mejora de forma intuitiva, destacando la selección activa y mostrando información relevante de manera legible.
+
+Interactividad Responsiva:
+Implementar un sistema de enfriamiento para evitar acciones repetitivas no intencionadas.
+
+Compatibilidad:
+Integrarse completamente con otros sistemas del juego, especialmente el sistema de estadísticas del jugador.
+
+Mantenimiento:
+Mantener una estructura modular con separación de responsabilidades entre la clase Upgrade y Item para facilitar futuros ajustes o correcciones.
+
+## Weapon
+
+Eficiencia en la Carga de Recursos:
+Minimizar el impacto de cargar gráficos mediante rutas de acceso organizadas y el uso eficiente de pygame.image.load.
+
+Extensibilidad:
+Facilitar la adición de nuevos tipos de armas o direcciones de ataque sin modificar significativamente la clase.
+
+Compatibilidad Visual:
+Garantizar que las imágenes cargadas sean compatibles con la escala y estilo gráfico del juego.
+
+Optimización del Rendimiento:
+Asegurar que la lógica de colocación y carga del sprite sea lo suficientemente rápida para no causar retrasos en tiempo real.
+
+Mantenimiento del Código:
+Mantener el código modular y legible para simplificar futuras modificaciones relacionadas con armas o integración con otros sistemas del juego.
